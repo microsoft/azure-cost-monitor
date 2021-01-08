@@ -1,3 +1,10 @@
+# Tutorial
+1. Download Azure CLI
+1. Run ```az login```
+1. Note the subscription ID you want to use
+1. Run ```az ad sp create-for-rbac --name [APP_NAME]```
+1. Note the response
+1. 
 # Project
 
 > This repo has been populated by an initial template to help get you started. Please

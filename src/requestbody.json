@@ -1,0 +1,22 @@
+{
+  "type": "ActualCost",
+  "timeframe": "MonthToDate",
+  "dataSet": {
+    "granularity": "None",
+    "aggregation": {
+      "totalCost": {
+        "name": "PreTaxCost",
+        "function": "Sum"
+      }
+    },
+    "filter": {
+      "Dimensions": {
+        "Name": "PublisherType",
+        "Operator": "In",
+        "Values": [ "azure" ]
+      }
+    }
+  },
+  "includeActualCost": false,
+  "includeFreshPartialCost": false
+}
