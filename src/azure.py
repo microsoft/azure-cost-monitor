@@ -1,5 +1,8 @@
 import adafruit_requests as requests
-import ujson as json
+import ssl
+import json
+import wifi
+import socketpool
 
 
 class azure:
@@ -9,6 +12,8 @@ class azure:
         self._password = password
         self._tennent_id = tennent_id
         self._subscription_id = subscription_id
+        pool = socketpool.SocketPool(wifi.radio)
+        self._https = requests.Session(pool, ssl.create_default_context())
 
     def _get_token(self):
         print('getting token')
@@ -19,7 +24,7 @@ class azure:
                 }
         url = 'https://login.microsoftonline.com/{}/oauth2/token'\
               .format(self._tennent_id)
-        response = requests.post(url, data=data)
+        response = self._https.post(url, data=data)
         json_resp = response.json()
         token = json_resp["access_token"]
         return token
@@ -33,8 +38,10 @@ class azure:
 
         url = 'https://management.azure.com/subscriptions/{}/providers/Microsoft.CostManagement/forecast?api-version=2019-10-01'\
               .format(self._subscription_id)
-        response = requests.post(url, json=data, headers=headers)
+
+        response = self._https.post(url, json=data, headers=headers)
         json_resp = response.json()
         # TODO Check for valid response
+        print(json_resp)
         cost_forecast = json_resp["properties"]["rows"][0][0]
         return cost_forecast
