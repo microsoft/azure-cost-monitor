@@ -15,8 +15,10 @@ class azure:
         pool = socketpool.SocketPool(wifi.radio)
         self._https = requests.Session(pool, ssl.create_default_context())
 
+    def _error_handler(self, error):
+        print(error['error_description'])
+
     def _get_token(self):
-        print('getting token')
         data = {'grant_type': 'client_credentials',
                 'client_id': self._app_id,
                 'client_secret': self._password,
@@ -26,7 +28,12 @@ class azure:
               .format(self._tennent_id)
         response = self._https.post(url, data=data)
         json_resp = response.json()
-        token = json_resp["access_token"]
+        try:
+            token = json_resp["access_tokn"]
+        except KeyError as error:
+            self._error_handler(error)
+            quit()
+
         return token
 
     def cost_forecast(self):
@@ -41,7 +48,10 @@ class azure:
 
         response = self._https.post(url, json=data, headers=headers)
         json_resp = response.json()
-        # TODO Check for valid response
-        print(json_resp)
-        cost_forecast = json_resp["properties"]["rows"][0][0]
+        try:
+            cost_forecast = json_resp["properties"]["rows"][0][0]
+        except Exception:
+            self._error_handler(json_resp)
+            quit()
+
         return cost_forecast
