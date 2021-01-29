@@ -42,8 +42,10 @@ print("My IP address is", wifi.radio.ipv4_address)
 # Connect to Azure
 while True:
     try:
+        # Create an instance of the Azure class with credentials
         myAzure = azure(secrets["appId"], secrets["azurePassword"], secrets["tenant"], secrets["subscription"])
 
+        # Print the current day cost forecast and refresh display
         magtag.set_text("Azure current day cost forecast: ${}".format(myAzure.cost_forecast()))
         magtag.refresh()
 
