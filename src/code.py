@@ -11,7 +11,6 @@ from adafruit_magtag.magtag import MagTag
 magtag = MagTag()
 
 #Format text 
-# TO DO: UPDATE FOR COST FORECAST ----------------------------------
 magtag.add_text(
     text_scale=2,
     text_wrap=25,
@@ -43,7 +42,6 @@ print("My IP address is", wifi.radio.ipv4_address)
 # Connect to Azure
 while True:
     try:
-        #magtag.set_text("Azure cost forecast: ") #REMOVE WHEN COST FORECAST READY
         myAzure = azure(secrets["appId"], secrets["azurePassword"], secrets["tenant"], secrets["subscription"])
 
         magtag.set_text("Azure current day cost forecast: ${}".format(myAzure.cost_forecast()))
